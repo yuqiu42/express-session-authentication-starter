@@ -9,10 +9,28 @@ const User = connection.models.User;
  */
 
 // TODO
-router.post("/login", (req, res, next) => {});
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    failureRedirect: "/login-failure",
+    successRedirect: "login-success"
+  })
+);
 
 // TODO
-router.post("/register", (req, res, next) => {});
+router.post("/register", (req, res, next) => {
+  const { salt, hash } = passwordUtils.generatePassword(req.body.password);
+  const newUser = new User({
+    username: req.body.username,
+    hash,
+    salt,
+    admin: true
+  });
+  newUser.save().then(user => {
+    console.log(user);
+  });
+  res.redirect("/login");
+});
 
 /**
  * -------------- GET ROUTES ----------------
