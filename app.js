@@ -52,7 +52,11 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.use((req, res, next) => {
+  console.log(req.session);
+  console.log(req.user);
+  next();
+});
 /**
  * -------------- ROUTES ----------------
  */
@@ -64,5 +68,5 @@ app.use(routes);
  * -------------- SERVER ----------------
  */
 
-// Server listens on http://localhost:3000
+// Server listens on http://localhost:3002
 app.listen(3002);
