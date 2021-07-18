@@ -6,4 +6,10 @@ module.exports.isAuth = (req, res, next) => {
   }
 };
 
-module.exports.isAdmin = (req, res, next) => {};
+module.exports.isAdmin = (req, res, next) => {
+  if (req.isAuthenticated() && req.user.admin) {
+    return next();
+  } else {
+    res.status(401).json({ msg: "Unauthorized for non-admin" });
+  }
+};

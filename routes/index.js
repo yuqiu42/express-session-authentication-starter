@@ -3,7 +3,7 @@ const passport = require("passport");
 const passwordUtils = require("../lib/passwordUtils");
 const connection = require("../config/database");
 const User = connection.models.User;
-const isAuth = require("./authMiddleware").isAuth;
+const authMiddleware = require("./authMiddleware");
 
 /**
  * -------------- POST ROUTES ----------------
@@ -69,11 +69,18 @@ router.get("/register", (req, res, next) => {
  *
  * Also, look up what behaviour express session has without a maxage set
  */
-router.get("/protected-route", isAuth, (req, res, next) => {
+router.get("/protected-route", authMiddleware.isAuth, (req, res, next) => {
   res.send(
     '<h1>You are authenticated</h1><p><a href="/logout">Logout and reload</a></p>'
   );
 });
+
+router.get("/admin-route", authMiddleware.isAdmin, (req, res, next) => {
+  res.send(
+    '<h1>You an admin</h1><p><a href="/logout">Logout and reload</a></p>'
+  );
+});
+
 
 // Visiting this route logs the user out
 router.get("/logout", (req, res, next) => {
