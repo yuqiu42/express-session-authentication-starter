@@ -13,7 +13,7 @@ router.post(
   "/login",
   passport.authenticate("local", {
     failureRedirect: "/login-failure",
-    successRedirect: "login-success"
+    successRedirect: "login-success",
   })
 );
 
@@ -24,9 +24,9 @@ router.post("/register", (req, res, next) => {
     username: req.body.username,
     hash,
     salt,
-    admin: true
+    admin: true,
   });
-  newUser.save().then(user => {
+  newUser.save().then((user) => {
     console.log(user);
   });
   res.redirect("/login");

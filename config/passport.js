@@ -5,9 +5,8 @@ const User = connection.models.User;
 const passwordUtils = require("../lib/passwordUtils");
 
 const verifyCallback = (username, password, done) => {
-  const user = 1;
   User.findOne({ username: username })
-    .then(user => {
+    .then((user) => {
       if (!user) {
         return done(null, false);
       }
@@ -22,7 +21,7 @@ const verifyCallback = (username, password, done) => {
         return done(null, false);
       }
     })
-    .catch(err => {
+    .catch((err) => {
       done(err);
     });
 };
@@ -31,14 +30,16 @@ const strategy = new LocalStrategy(verifyCallback);
 
 passport.use(strategy);
 
+// To add to the "passport" field in the session
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
+// To populate the req.user from the session
 passport.deserializeUser((userId, done) => {
   User.findById(userId)
-    .then(user => {
+    .then((user) => {
       done(null, user);
     })
-    .catch(err => done(err));
+    .catch((err) => done(err));
 });
